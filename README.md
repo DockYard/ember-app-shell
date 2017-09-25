@@ -1,11 +1,11 @@
-# ember-fastboot-app-shell
+# ember-app-shell
 
 This README outlines the details of collaborating on this Ember addon.
 
 ## Installation
 
 * `git clone <repository-url>` this repository
-* `cd ember-fastboot-app-shell`
+* `cd ember-app-shell`
 * `npm install`
 
 ## Running
