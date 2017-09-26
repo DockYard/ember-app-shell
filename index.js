@@ -4,6 +4,7 @@
 const fs = require('fs');
 const path = require('path');
 const express = require('express');
+const http = require('http');
 const chromeLauncher = require('chrome-launcher');
 const chromeInterface = require('chrome-remote-interface');
 
@@ -26,7 +27,7 @@ module.exports = {
     let { outputFile, visitPath } = this.app.options['ember-app-shell'];
 
     return this._launchAppServer(directory)
-      .then(() => {
+      .then((server) => {
         return this._launchChrome().then((client) => {
           const { Page, Runtime } = client;
 
@@ -38,6 +39,7 @@ module.exports = {
             .then(() => Runtime.evaluate({ expression: 'document.documentElement.outerHTML' }))
             .then((html) => {
               fs.writeFileSync(path.join(directory, outputFile), html.result.value.toString());
+              server.close();
             });
 
         });
@@ -47,12 +49,14 @@ module.exports = {
   _launchAppServer(directory) {
     return new Promise((resolve, reject) => {
       let app = express();
+      let server = http.createServer(app);
       app.use(express.static(directory));
       app.get('*', function (req, res) {
         res.sendFile('/index.html', { root: directory });
       });
-      app.listen(4321, () => {
-        resolve(app);
+
+      server.listen(4321, () => {
+        resolve(server);
       });
     });
   },
@@ -64,7 +68,6 @@ module.exports = {
       return chromeInterface({ port: chrome.port });
     });
   },
-
 
   isDevelopingAddon: () => true
 };

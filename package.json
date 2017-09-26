@@ -11,7 +11,11 @@
   "dependencies": {
     "chrome-launcher": "^0.8.0",
     "chrome-remote-interface": "^0.25.0",
+    "ember-cli-babel": "^6.3.0",
     "express": "^4.15.5"
+  },
+  "devDependencies": {
+    "ember-cli": "~2.15.0"
   },
   "engines": {
     "node": "^4.5 || 6.* || >= 7.*"
