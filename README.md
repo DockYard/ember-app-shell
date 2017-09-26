@@ -1,26 +1,34 @@
 # ember-app-shell
 
-This README outlines the details of collaborating on this Ember addon.
+Renders an App Shell based on your actual running Ember.js application using Headless Chrome!
 
-## Installation
+## Configuration
 
-* `git clone <repository-url>` this repository
-* `cd ember-app-shell`
-* `npm install`
+There are two things you can configure, here's an example of how it can look like:
 
-## Running
+```javascript
+var EmberApp = require('ember-cli/lib/broccoli/ember-app');
 
-* `ember serve`
-* Visit your app at [http://localhost:4200](http://localhost:4200).
+module.exports = function(defaults) {
+  var app = new EmberApp(defaults, {
+    'ember-app-shell': {
+      visitPath: '/my-app-shell',
+      outputFile: 'my-app-shell.html'
+    }
+  });
 
-## Running Tests
+  return app.toTree();
+};
+```
 
-* `npm test` (Runs `ember try:each` to test your addon against multiple Ember versions)
-* `ember test`
-* `ember test --server`
+### `visitPath`
 
-## Building
+This determines which route in your application is used to render the app shell.
 
-* `ember build`
+Default: `/app-shell`.
 
-For more information on using ember-cli, visit [https://ember-cli.com/](https://ember-cli.com/).
+### `outputFile`
+
+This determines where the App Shell file is written to in your build. Specifying `index.html` will overwrite your existing `index.html`.
+
+Default: `app-shell.html`
