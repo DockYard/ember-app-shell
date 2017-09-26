@@ -13,6 +13,8 @@ const DEFAULT_OPTIONS = {
   outputFile: 'app-shell.html'
 };
 
+const PLACEHOLDER = '<!-- EMBER_APP_SHELL_PLACEHOLDER -->';
+
 module.exports = {
   name: 'ember-app-shell',
 
@@ -36,14 +38,22 @@ module.exports = {
             .then(() => Page.loadEventFired());
 
           return navigate
-            .then(() => Runtime.evaluate({ expression: 'document.documentElement.outerHTML' }))
+            .then(() => Runtime.evaluate({ expression: "document.querySelector('.ember-view').outerHTML" }))
             .then((html) => {
-              fs.writeFileSync(path.join(directory, outputFile), html.result.value.toString());
+              let indexHTML = fs.readFileSync(path.join(directory, 'index.html')).toString();
+              let appShellHTML = indexHTML.replace(PLACEHOLDER, html.result.value.toString());
+              fs.writeFileSync(path.join(directory, outputFile), appShellHTML);
               server.close();
             });
 
         });
       });
+  },
+
+  contentFor(type) {
+    if (type === 'body-footer') {
+      return PLACEHOLDER;
+    }
   },
 
   _launchAppServer(directory) {
