@@ -1,13 +1,13 @@
 {
   "name": "ember-app-shell",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "The default blueprint for ember-cli addons.",
   "keywords": [
     "ember-addon"
   ],
   "license": "MIT",
   "author": "",
-  "repository": "",
+  "repository": "https://github.com/DockYard/ember-app-shell",
   "dependencies": {
     "chrome-launcher": "^0.8.0",
     "chrome-remote-interface": "^0.25.0",
