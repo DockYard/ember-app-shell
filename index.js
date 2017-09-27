@@ -30,8 +30,14 @@ module.exports = {
 
     return this._launchAppServer(directory)
       .then((server) => {
-        return this._launchChrome().then((client) => {
+        return this._launchChrome().then(({ client, chrome }) => {
           const { Page, Runtime } = client;
+
+          const kill = () => {
+            server.close();
+            client.close();
+            return chrome.kill();
+          }
 
           const navigate = Page.enable()
             .then(() => Page.navigate({ url: `http://localhost:4321${visitPath}` }))
@@ -43,8 +49,8 @@ module.exports = {
               let indexHTML = fs.readFileSync(path.join(directory, 'index.html')).toString();
               let appShellHTML = indexHTML.replace(PLACEHOLDER, html.result.value.toString());
               fs.writeFileSync(path.join(directory, outputFile), appShellHTML);
-              server.close();
-            });
+              return kill();
+            }).catch(kill);
 
         });
       });
@@ -75,7 +81,9 @@ module.exports = {
     return chromeLauncher.launch({
       chromeFlags: [ '--disable-gpu', '--headless' ]
     }).then(chrome => {
-      return chromeInterface({ port: chrome.port });
+      return chromeInterface({ port: chrome.port }).then((client) => {
+        return { client, chrome };
+      });
     });
   },
 
