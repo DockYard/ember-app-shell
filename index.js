@@ -85,7 +85,5 @@ module.exports = {
         return { client, chrome };
       });
     });
-  },
-
-  isDevelopingAddon: () => true
+  }
 };
