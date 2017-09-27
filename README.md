@@ -32,3 +32,7 @@ Default: `/app-shell`.
 This determines where the App Shell file is written to in your build. Specifying `index.html` will overwrite your existing `index.html`.
 
 Default: `app-shell.html`
+
+## Making sure your environment has Chrome
+
+See the [README](https://www.npmjs.com/package/chrome-launcher#continuous-integration) of the `chrome-launcher` NPM package for more details.
