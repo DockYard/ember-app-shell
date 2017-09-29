@@ -4,9 +4,11 @@ Renders an App Shell based on your actual running Ember.js application using Hea
 
 ## How does this work?
 
-Near the end of Ember CLI's build process, this addon loads your app in a Headless Chrome session and takes the rendered HTML output of `/app-shell` and adds it as `app-shell.html` to the build. This way you are able to serve some static html before Ember boots up in the browser.
+Near the end of Ember CLI's build process, this addon loads your app in a Headless Chrome session and takes the rendered HTML and replaces `index.html` with the output of the `/app-shell` route. This way you are able to serve some static html before Ember boots up in the browser, but not having to maintain that manually in the `index.html` file.
 
 See _[The App Shell Model](https://developers.google.com/web/fundamentals/architecture/app-shell)_ on Google's Developer website for more information about what an App Shell is.
+
+This addon is intended to be used with [Ember Service Worker](http://ember-service-worker.com) and the [ember-service-worker-index](https://github.com/DockYard/ember-service-worker-index) addon.
 
 ## Configuration
 
