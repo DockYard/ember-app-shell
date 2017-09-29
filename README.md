@@ -2,7 +2,7 @@
 
 **[ember-app-shell is built and maintained by DockYard, contact us for expert Ember.js consulting](https://dockyard.com/ember-consulting)**.
 
-Renders an App Shell based on your actual running Ember.js application using Headless Chrome!
+Renders an App Shell based on your actual running Ember.js application using Headless Chrome! It also inlines the relevant minimal CSS using the [Critical](https://github.com/addyosmani/critical) tool.
 
 ## How does this work?
 
