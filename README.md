@@ -1,5 +1,7 @@
 # ember-app-shell
 
+**[ember-app-shell is built and maintained by DockYard, contact us for expert Ember.js consulting](https://dockyard.com/ember-consulting)**.
+
 Renders an App Shell based on your actual running Ember.js application using Headless Chrome!
 
 ## How does this work?
@@ -51,3 +53,11 @@ This determines where the App Shell file is written to in your build.
 Specifying `index.html` will overwrite the existing `index.html`.
 
 Default: `index.html`
+
+## Legal
+
+[DockYard](http://dockyard.com/), Inc. &copy; 2017
+
+[@dockyard](http://twitter.com/dockyard)
+
+[Licensed under the MIT license](http://www.opensource.org/licenses/mit-license.php)
