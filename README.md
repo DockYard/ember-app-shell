@@ -10,6 +10,16 @@ See _[The App Shell Model](https://developers.google.com/web/fundamentals/archit
 
 This addon is intended to be used with [Ember Service Worker](http://ember-service-worker.com) and the [ember-service-worker-index](https://github.com/DockYard/ember-service-worker-index) addon.
 
+## Installation
+
+```shell
+ember install ember-app-shell
+```
+
+You also need to make sure that every environment that will build your app runs Google Chrome (Canary).
+
+See the [README](https://www.npmjs.com/package/chrome-launcher#continuous-integration) of the `chrome-launcher` NPM package for more details on how to install Chrome on CI environments.
+
 ## Configuration
 
 There are two things you can configure, here's an example of how it can look like:
@@ -41,7 +51,3 @@ This determines where the App Shell file is written to in your build.
 Specifying `index.html` will overwrite the existing `index.html`.
 
 Default: `index.html`
-
-## Making sure your environment has Chrome
-
-See the [README](https://www.npmjs.com/package/chrome-launcher#continuous-integration) of the `chrome-launcher` NPM package for more details.
