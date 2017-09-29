@@ -22,6 +22,56 @@ You also need to make sure that every environment that will build your app runs 
 
 See the [README](https://www.npmjs.com/package/chrome-launcher#continuous-integration) of the `chrome-launcher` NPM package for more details on how to install Chrome on CI environments.
 
+## Getting Started
+
+This addon will visit `/app-shell` by default when the Ember app is built by Ember CLI, so we need to make sure that route exists. The easiest way is to generate one using Ember CLI:
+
+```shell
+ember generate route app-shell
+```
+
+Now let's assume your `application.hbs` and `app-shell.hbs` look like the following:
+
+```handlebars
+{{! application.hbs}}
+<header>
+  <h1>My App's Name</h1>
+  <img src="/assets/images/logo.png" alt="My App's Name Logo">
+</header>
+
+<main>
+  {{outlet}}
+</main>
+```
+
+```handlebars
+{{! app-shell.hbs}}
+<div class="page-loading-spinner">
+  <img class="loading-spinner" src="/assets/images/loading-spinner.gif" alt="loading...">
+</div>
+```
+
+Then after building (e.g. `ember build`) the built `index.html` file (e.g. `dist/index.html`) will contain:
+
+```html
+<div id="ember377" class="ember-view">
+  <header>
+    <h1>My App's Name</h1>
+    <img src="/assets/images/logo.png" alt="My App's Name Logo">
+  </header>
+  
+  <main>
+    <div id="ember422" class="ember-view">
+      <div class="page-loading-spinner">
+        <img class="loading-spinner" src="/assets/images/loading-spinner.gif" alt="loading...">
+      </div>
+    </div>
+  </main>
+</div>
+```
+
+If you now open up your app in the browser, you'll see the app shell content until the Ember.js app renders.
+
 ## Configuration
 
 There are two things you can configure, here's an example of how it can look like:
