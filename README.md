@@ -35,9 +35,10 @@ Default: `/app-shell`.
 
 ### `outputFile`
 
-This determines where the App Shell file is written to in your build. Specifying `index.html` will overwrite your existing `index.html`.
+This determines where the App Shell file is written to in your build.
+Specifying `index.html` will overwrite the existing `index.html`.
 
-Default: `app-shell.html`
+Default: `index.html`
 
 ## Making sure your environment has Chrome
 

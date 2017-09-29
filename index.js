@@ -10,7 +10,7 @@ const chromeInterface = require('chrome-remote-interface');
 
 const DEFAULT_OPTIONS = {
   visitPath: '/app-shell',
-  outputFile: 'app-shell.html'
+  outputFile: 'index.html'
 };
 
 const PLACEHOLDER = '<!-- EMBER_APP_SHELL_PLACEHOLDER -->';
