@@ -5,6 +5,7 @@ const fs = require('fs');
 const path = require('path');
 const express = require('express');
 const http = require('http');
+const critical = require('critical');
 const chromeLauncher = require('chrome-launcher');
 const chromeInterface = require('chrome-remote-interface');
 
@@ -12,6 +13,10 @@ const DEFAULT_OPTIONS = {
   visitPath: '/app-shell',
   outputFile: 'index.html'
 };
+
+const DEFAULT_CRITICAL_OPTIONS = {
+  minify: true
+}
 
 const PLACEHOLDER = '<!-- EMBER_APP_SHELL_PLACEHOLDER -->';
 
@@ -48,9 +53,16 @@ module.exports = {
             .then((html) => {
               let indexHTML = fs.readFileSync(path.join(directory, 'index.html')).toString();
               let appShellHTML = indexHTML.replace(PLACEHOLDER, html.result.value.toString());
-              fs.writeFileSync(path.join(directory, outputFile), appShellHTML);
-              return kill();
-            }).catch(kill);
+              let criticalOptions = Object.assign(DEFAULT_CRITICAL_OPTIONS, {
+                inline: true,
+                base: directory,
+                folder: directory,
+                html: appShellHTML,
+                dest: outputFile
+              }, this.app.options['ember-app-shell'].criticalCSSOptions);
+              return critical.generate(criticalOptions);
+            })
+            .then(kill, kill);
 
         });
       });
