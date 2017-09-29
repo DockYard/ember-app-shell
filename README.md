@@ -83,7 +83,12 @@ module.exports = function(defaults) {
   var app = new EmberApp(defaults, {
     'ember-app-shell': {
       visitPath: '/my-app-shell',
-      outputFile: 'my-app-shell.html'
+      outputFile: 'my-app-shell.html',
+      // https://github.com/addyosmani/critical#options
+      criticalCSSOptions: {
+        width: 1300,
+        height: 900
+      }
     }
   });
 
