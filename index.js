@@ -49,7 +49,7 @@ module.exports = {
             .then(() => Page.loadEventFired());
 
           return navigate
-            .then(() => Runtime.evaluate({ expression: "document.querySelector('.ember-view').outerHTML" }))
+            .then(() => Runtime.evaluate({ expression: "document.body.querySelector('.ember-view').outerHTML" }))
             .then((html) => {
               let indexHTML = fs.readFileSync(path.join(directory, 'index.html')).toString();
               let appShellHTML = indexHTML.replace(PLACEHOLDER, html.result.value.toString());
