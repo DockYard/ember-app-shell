@@ -98,7 +98,7 @@ module.exports = function(defaults) {
 
 ### `visitPath`
 
-This determines which route in your application is used to render the app shell.
+This determines which route in your application is used to render the app shell. If you have your router configured with `locationType: 'hash'` then you might need to set `visitPath: '/#/app-shell'`.
 
 Default: `/app-shell`.
 
