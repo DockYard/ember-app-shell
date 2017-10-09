@@ -47,8 +47,10 @@ module.exports = {
             return chrome.kill();
           }
 
+          const url = path.join('http://localhost:4321', visitPath);
+
           const navigate = Page.enable()
-            .then(() => Page.navigate({ url: 'http://localhost:4321' }))
+            .then(() => Page.navigate({ url }))
             .then(() => Page.loadEventFired());
 
           return navigate
