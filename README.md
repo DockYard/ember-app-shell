@@ -109,6 +109,20 @@ Specifying `index.html` will overwrite the existing `index.html`.
 
 Default: `index.html`
 
+### `retries`
+
+How many times to try to get the `.ember-view` element rendered in the DOM.
+Ember App Shell will wait 50ms between each try.
+This is useful if the app has not rendered on the `load` event.
+
+Default: `2`
+
+### `criticalCSSOptions`
+
+The options passed to the [`critical`](https://github.com/addyosmani/critical) module.
+
+Default: `{ minify: true }`
+
 ## Legal
 
 [DockYard](http://dockyard.com/), Inc. &copy; 2017

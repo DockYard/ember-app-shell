@@ -11,7 +11,8 @@ const chromeInterface = require('chrome-remote-interface');
 
 const DEFAULT_OPTIONS = {
   visitPath: '/app-shell',
-  outputFile: 'index.html'
+  outputFile: 'index.html',
+  retries: 2
 };
 
 const DEFAULT_CRITICAL_OPTIONS = {
@@ -49,7 +50,7 @@ module.exports = {
             .then(() => Page.loadEventFired());
 
           return navigate
-            .then(() => Runtime.evaluate({ expression: "document.body.querySelector('.ember-view').outerHTML" }))
+            .then(() => this._getFirstEmberView(Runtime, this.app.options['ember-app-shell'].retries))
             .then((html) => {
               let indexHTML = fs.readFileSync(path.join(directory, 'index.html')).toString();
               let appShellHTML = indexHTML.replace(PLACEHOLDER, html.result.value.toString());
@@ -72,6 +73,22 @@ module.exports = {
     if (type === 'body-footer') {
       return PLACEHOLDER;
     }
+  },
+
+  _getFirstEmberView(Runtime, retry) {
+    if (retry < 0) {
+      throw new Error('Unable to find an `.ember-view` element');
+    }
+
+    return Runtime.evaluate({ expression: "document.body.querySelector('.ember-view').outerHTML" })
+      .then(result => {
+        if (/Cannot read property 'outerHTML' of null/.test(result.result.description)) {
+          return new Promise(resolve => setTimeout(resolve, 50))
+            .then(() => this._getFirstEmberView(Runtime, retry - 1));
+        }
+
+        return result;
+      })
   },
 
   _launchAppServer(directory) {
