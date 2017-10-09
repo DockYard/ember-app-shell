@@ -115,6 +115,12 @@ The options passed to the [`critical`](https://github.com/addyosmani/critical) m
 
 Default: `{ minify: true }`
 
+### Export application global
+
+To properly ensure app rendering of the app shell this addon makes use of Ember's visit API. To do this in all environments you must
+configure your app to export its application global for all environments. By default, Ember does not do this in `production`. 
+[Read more about exporting your application's global](https://github.com/ember-cli/ember-export-application-global).
+
 ## Legal
 
 [DockYard](http://dockyard.com/), Inc. &copy; 2017
