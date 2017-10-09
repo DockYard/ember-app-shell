@@ -8,6 +8,9 @@ const http = require('http');
 const critical = require('critical');
 const chromeLauncher = require('chrome-launcher');
 const chromeInterface = require('chrome-remote-interface');
+const EmberApp = require('ember-cli/lib/broccoli/ember-app');
+const envTarget = process.env.DEPLOY_TARGET || EmberApp.env();
+const stringUtil = require('ember-cli-string-utils');
 
 const DEFAULT_OPTIONS = {
   visitPath: '/app-shell',
@@ -45,11 +48,16 @@ module.exports = {
           }
 
           const navigate = Page.enable()
-            .then(() => Page.navigate({ url: `http://localhost:4321${visitPath}` }))
+            .then(() => Page.navigate({ url: 'http://localhost:4321' }))
             .then(() => Page.loadEventFired());
 
           return navigate
-            .then(() => Runtime.evaluate({ expression: "document.body.querySelector('.ember-view').outerHTML" }))
+            .then(() => Runtime.evaluate({ awaitPromise: true, expression: `
+              ${this._appGlobal()}.visit('${visitPath}')
+                .then((application) => {
+                  return document.body.querySelector('.ember-view').outerHTML;
+                });
+            `}))
             .then((html) => {
               let indexHTML = fs.readFileSync(path.join(directory, 'index.html')).toString();
               let appShellHTML = indexHTML.replace(PLACEHOLDER, html.result.value.toString());
@@ -63,7 +71,6 @@ module.exports = {
               return critical.generate(criticalOptions);
             })
             .then(kill, kill);
-
         });
       });
   },
@@ -97,5 +104,17 @@ module.exports = {
         return { client, chrome };
       });
     });
+  },
+
+  _appGlobal() {
+    let config = require(path.join(this.app.project.root, 'config/environment'))(envTarget);
+
+    var value = config.exportApplicationGlobal;
+
+    if (typeof value === 'string') {
+      return value;
+    } else {
+      return stringUtil.classify(config.modulePrefix);
+    }
   }
 };
