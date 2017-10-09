@@ -109,6 +109,12 @@ Specifying `index.html` will overwrite the existing `index.html`.
 
 Default: `index.html`
 
+### `criticalCSSOptions`
+
+The options passed to the [`critical`](https://github.com/addyosmani/critical) module.
+
+Default: `{ minify: true }`
+
 ## Legal
 
 [DockYard](http://dockyard.com/), Inc. &copy; 2017
