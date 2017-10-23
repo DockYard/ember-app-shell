@@ -23,6 +23,8 @@ const DEFAULT_CRITICAL_OPTIONS = {
 
 const PLACEHOLDER = '<!-- EMBER_APP_SHELL_PLACEHOLDER -->';
 
+const SERVER_PORT = process.env.APP_SHELL_EXPRESS_PORT || '4321';
+
 module.exports = {
   name: 'ember-app-shell',
 
@@ -47,7 +49,7 @@ module.exports = {
             return chrome.kill();
           }
 
-          const url = path.join('http://localhost:4321', visitPath);
+          const url = path.join(`http://localhost:${SERVER_PORT}`, visitPath);
 
           const navigate = Page.enable()
             .then(() => Page.navigate({ url }))
@@ -92,7 +94,7 @@ module.exports = {
         res.sendFile('/index.html', { root: directory });
       });
 
-      server.listen(4321, () => {
+      server.listen(SERVER_PORT, () => {
         resolve(server);
       });
     });
