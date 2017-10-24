@@ -84,7 +84,8 @@ module.exports = function(defaults) {
     'ember-app-shell': {
       visitPath: '/my-app-shell',
       outputFile: 'my-app-shell.html',
-      disableSandbox: false,
+      // https://peter.sh/experiments/chromium-command-line-switches/
+      chromeFlags: [],
       // https://github.com/addyosmani/critical#options
       criticalCSSOptions: {
         width: 1300,
@@ -110,11 +111,11 @@ Specifying `index.html` will overwrite the existing `index.html`.
 
 Default: `index.html`
 
-### `disableSandbox`
+### `chromeFlags`
 
-Enabling this option causes [`chrome-launcher`](https://github.com/GoogleChrome/chrome-launcher) to pass the `--no-sandbox` flag to chrome. This may be needed on certain UNIX systems, which need this flag as a workaround to get chrome headless running (see https://github.com/GoogleChrome/chrome-launcher/issues/6 and https://github.com/GoogleChrome/lighthouse/issues/2726).
+Flags passed to chrome by [`chrome-launcher`](https://github.com/GoogleChrome/chrome-launcher).
 
-Default: `false`
+Default: `[]`
 
 ### `criticalCSSOptions`
 
@@ -132,13 +133,14 @@ configure your app to export its application global for all environments. By def
 
 ### `ember server` fails to start
 
-If `ember server` results in a long idle time followed by an error similar to this, try enabling the `disableSandbox` option.
+If `ember server` results in a long idle time followed by an error similar to this, try enabling adding `--no-sandbox` to the `chromeFlags` option.
 ```
 Error: connect ECONNREFUSED 127.0.0.1:44625
     at Object._errnoException (util.js:1021:11)
     at _exceptionWithHostPort (util.js:1043:20)
     at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1175:14)
 ```
+This may be needed on certain UNIX systems, which need this flag as a workaround to get chrome headless running (see https://github.com/GoogleChrome/chrome-launcher/issues/6 and https://github.com/GoogleChrome/lighthouse/issues/2726).
 
 ## Legal
 
