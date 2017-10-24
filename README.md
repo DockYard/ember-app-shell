@@ -59,7 +59,7 @@ Then after building (e.g. `ember build`) the built `index.html` file (e.g. `dist
     <h1>My App's Name</h1>
     <img src="/assets/images/logo.png" alt="My App's Name Logo">
   </header>
-  
+
   <main>
     <div id="ember422" class="ember-view">
       <div class="page-loading-spinner">
@@ -74,7 +74,7 @@ If you now open up your app in the browser, you'll see the app shell content unt
 
 ## Configuration
 
-There are two things you can configure, here's an example of how it can look like:
+There are multiple things you can configure, here's an example of how it can look like:
 
 ```javascript
 var EmberApp = require('ember-cli/lib/broccoli/ember-app');
@@ -84,6 +84,7 @@ module.exports = function(defaults) {
     'ember-app-shell': {
       visitPath: '/my-app-shell',
       outputFile: 'my-app-shell.html',
+      disableSandbox: false,
       // https://github.com/addyosmani/critical#options
       criticalCSSOptions: {
         width: 1300,
@@ -109,6 +110,12 @@ Specifying `index.html` will overwrite the existing `index.html`.
 
 Default: `index.html`
 
+### `disableSandbox`
+
+Enabling this option causes [`chrome-launcher`](https://github.com/GoogleChrome/chrome-launcher) to pass the `--no-sandbox` flag to chrome. This may be needed on certain UNIX systems, which need this flag as a workaround to get chrome headless running (see https://github.com/GoogleChrome/chrome-launcher/issues/6 and https://github.com/GoogleChrome/lighthouse/issues/2726).
+
+Default: `false`
+
 ### `criticalCSSOptions`
 
 The options passed to the [`critical`](https://github.com/addyosmani/critical) module.
@@ -118,8 +125,20 @@ Default: `{ minify: true }`
 ### Export application global
 
 To properly ensure app rendering of the app shell this addon makes use of Ember's visit API. To do this in all environments you must
-configure your app to export its application global for all environments. By default, Ember does not do this in `production`. 
+configure your app to export its application global for all environments. By default, Ember does not do this in `production`.
 [Read more about exporting your application's global](https://github.com/ember-cli/ember-export-application-global).
+
+## Troubleshooting
+
+### `ember server` fails to start
+
+If `ember server` results in a long idle time followed by an error similar to this, try enabling the `disableSandbox` option.
+```
+Error: connect ECONNREFUSED 127.0.0.1:44625
+    at Object._errnoException (util.js:1021:11)
+    at _exceptionWithHostPort (util.js:1043:20)
+    at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1175:14)
+```
 
 ## Legal
 

@@ -14,7 +14,8 @@ const stringUtil = require('ember-cli-string-utils');
 
 const DEFAULT_OPTIONS = {
   visitPath: '/app-shell',
-  outputFile: 'index.html'
+  outputFile: 'index.html',
+  disableSandbox: false
 };
 
 const DEFAULT_CRITICAL_OPTIONS = {
@@ -101,9 +102,15 @@ module.exports = {
   },
 
   _launchChrome() {
-    return chromeLauncher.launch({
-      chromeFlags: [ '--disable-gpu', '--headless', '--no-sandbox' ]
-    }).then(chrome => {
+    let { disableSandbox } = this.app.options['ember-app-shell']
+
+    let chromeFlags = [
+      '--disable-gpu',
+      '--headless',
+      ...(disableSandbox ? ['--no-sandbox'] : [])
+    ]
+
+    return chromeLauncher.launch({ chromeFlags }).then(chrome => {
       return chromeInterface({ port: chrome.port }).then((client) => {
         return { client, chrome };
       });
