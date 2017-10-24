@@ -102,7 +102,7 @@ module.exports = {
 
   _launchChrome() {
     return chromeLauncher.launch({
-      chromeFlags: [ '--disable-gpu', '--headless' ]
+      chromeFlags: [ '--disable-gpu', '--headless', '--no-sandbox' ]
     }).then(chrome => {
       return chromeInterface({ port: chrome.port }).then((client) => {
         return { client, chrome };
