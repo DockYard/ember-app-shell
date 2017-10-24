@@ -14,12 +14,13 @@ const stringUtil = require('ember-cli-string-utils');
 
 const DEFAULT_OPTIONS = {
   visitPath: '/app-shell',
-  outputFile: 'index.html'
+  outputFile: 'index.html',
+  chromeFlags: []
 };
 
 const DEFAULT_CRITICAL_OPTIONS = {
   minify: true
-}
+};
 
 const PLACEHOLDER = '<!-- EMBER_APP_SHELL_PLACEHOLDER -->';
 
@@ -101,9 +102,13 @@ module.exports = {
   },
 
   _launchChrome() {
-    return chromeLauncher.launch({
-      chromeFlags: [ '--disable-gpu', '--headless' ]
-    }).then(chrome => {
+    let chromeFlags = [
+      '--disable-gpu',
+      '--headless',
+      ...this.app.options['ember-app-shell'].chromeFlags
+    ];
+
+    return chromeLauncher.launch({ chromeFlags }).then(chrome => {
       return chromeInterface({ port: chrome.port }).then((client) => {
         return { client, chrome };
       });
