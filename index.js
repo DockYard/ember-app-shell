@@ -59,14 +59,20 @@ module.exports = {
                 Application.autoboot = false;
               });
             `}))
-            .then(() => Page.loadEventFired())
+            .then(() => Page.loadEventFired());
 
           return navigate
             .then(() => Runtime.evaluate({ awaitPromise: true, expression: `
-              ${this._appGlobal()}.visit('${visitPath}')
-                .then((application) => {
-                  return document.body.querySelector('.ember-view').outerHTML;
-                });
+              new Promise((resolve, reject) => {
+                try {
+                  ${this._appGlobal()}.visit('${visitPath}')
+                    .then((application) => {
+                      return resolve(document.body.querySelector('.ember-view').outerHTML);
+                    });
+                } catch(e) {
+                  return reject('ember-app-shell-runtime-evaluate-error' + e);
+                }
+              });
             `}))
             .then((html) => {
               console.log('html is', html);
