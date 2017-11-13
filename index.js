@@ -63,19 +63,41 @@ module.exports = {
 
           return navigate
             .then(() => Runtime.evaluate({ awaitPromise: true, expression: `
+              // Wrap inside a native promise since appGlobal.visit returns
+              // RSVP.Promise which doesn't play well with awaitPromise.
               new Promise((resolve, reject) => {
-                try {
-                  ${this._appGlobal()}.visit('${visitPath}')
-                    .then((application) => {
-                      return resolve(document.body.querySelector('.ember-view').outerHTML);
-                    });
-                } catch(e) {
-                  return reject('ember-app-shell-runtime-evaluate-error' + e);
+                const getOuterHTML = () => {
+                  try {
+                    window['${this._appGlobal()}'].visit('${visitPath}')
+                      .then((application) => {
+                        return resolve(document.body.querySelector('.ember-view').outerHTML);
+                      });
+                  } catch(e) {
+                    // Log errors for future debugging.
+                    return reject(e);
+                  }
+                };
+                if (window['${this._appGlobal()}']) {
+                  getOuterHTML();
+                } else {
+                  // In case the global has not yet been defined.
+                  Object.defineProperty(window, '${this._appGlobal()}', {
+                    configurable: true,
+                    enumerable: true,
+                    writeable: true,
+                    get: function() {
+                      return this._appGlobal;
+                    },
+                    set: function(val) {
+                      this._appGlobal = val;
+                      // Get the outerHTML after global has been set.
+                      getOuterHTML();
+                    }
+                  });
                 }
               });
             `}))
             .then((html) => {
-              console.log('html is', html);
               let indexHTML = fs.readFileSync(path.join(directory, 'index.html')).toString();
               let appShellHTML = indexHTML.replace(PLACEHOLDER, html.result.value.toString());
               let criticalOptions = Object.assign(DEFAULT_CRITICAL_OPTIONS, {
