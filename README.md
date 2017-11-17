@@ -18,9 +18,16 @@ This addon is intended to be used with [Ember Service Worker](http://ember-servi
 ember install ember-app-shell
 ```
 
-You also need to make sure that every environment that will build your app runs Google Chrome (Canary).
+### Make sure Google Chrome is installed on the build environment
 
+You also need to make sure that every environment that will build your app runs Google Chrome (Canary).
 See the [README](https://www.npmjs.com/package/chrome-launcher#continuous-integration) of the `chrome-launcher` NPM package for more details on how to install Chrome on CI environments.
+
+### Export application global
+
+To properly ensure app rendering of the app shell this addon makes use of Ember's visit API. To do this in all environments you must
+configure your app to export its application global for all environments. By default, Ember does not do this in `production`.
+[Read more about exporting your application's global](https://github.com/ember-cli/ember-export-application-global).
 
 ## Getting Started
 
@@ -122,12 +129,6 @@ Default: `[]`
 The options passed to the [`critical`](https://github.com/addyosmani/critical) module.
 
 Default: `{ minify: true }`
-
-### Export application global
-
-To properly ensure app rendering of the app shell this addon makes use of Ember's visit API. To do this in all environments you must
-configure your app to export its application global for all environments. By default, Ember does not do this in `production`.
-[Read more about exporting your application's global](https://github.com/ember-cli/ember-export-application-global).
 
 ## Troubleshooting
 
