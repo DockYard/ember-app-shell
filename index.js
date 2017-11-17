@@ -54,14 +54,48 @@ module.exports = {
 
           const navigate = Page.enable()
             .then(() => Page.navigate({ url }))
+            .then(() => Page.addScriptToEvaluateOnNewDocument({source: `
+              window.addEventListener('application', ({ detail: Application }) => {
+                Application.autoboot = false;
+              });
+            `}))
             .then(() => Page.loadEventFired());
 
           return navigate
             .then(() => Runtime.evaluate({ awaitPromise: true, expression: `
-              ${this._appGlobal()}.visit('${visitPath}')
-                .then((application) => {
-                  return document.body.querySelector('.ember-view').outerHTML;
-                });
+              // Wrap inside a native promise since appGlobal.visit returns
+              // RSVP.Promise which doesn't play well with awaitPromise.
+              new Promise((resolve, reject) => {
+                const getOuterHTML = () => {
+                  try {
+                    window['${this._appGlobal()}'].visit('${visitPath}')
+                      .then((application) => {
+                        return resolve(document.body.querySelector('.ember-view').outerHTML);
+                      });
+                  } catch(e) {
+                    // Log errors for future debugging.
+                    return reject(e);
+                  }
+                };
+                if (window['${this._appGlobal()}']) {
+                  getOuterHTML();
+                } else {
+                  // In case the global has not yet been defined.
+                  Object.defineProperty(window, '${this._appGlobal()}', {
+                    configurable: true,
+                    enumerable: true,
+                    writeable: true,
+                    get: function() {
+                      return this._appGlobal;
+                    },
+                    set: function(val) {
+                      this._appGlobal = val;
+                      // Get the outerHTML after global has been set.
+                      getOuterHTML();
+                    }
+                  });
+                }
+              });
             `}))
             .then((html) => {
               let indexHTML = fs.readFileSync(path.join(directory, 'index.html')).toString();
@@ -75,6 +109,7 @@ module.exports = {
               }, this.app.options['ember-app-shell'].criticalCSSOptions);
               return critical.generate(criticalOptions);
             })
+            .catch((error) => console.log(error))
             .then(kill, kill);
         });
       });
