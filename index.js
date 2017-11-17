@@ -66,6 +66,9 @@ module.exports = {
               // Wrap inside a native promise since appGlobal.visit returns
               // RSVP.Promise which doesn't play well with awaitPromise.
               new Promise((resolve, reject) => {
+                // Fail after 30 seconds.
+                setTimeout(reject, 30000);
+
                 const getOuterHTML = () => {
                   try {
                     window['${this._appGlobal()}'].visit('${visitPath}')
