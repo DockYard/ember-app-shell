@@ -53,12 +53,12 @@ module.exports = {
           const url = path.join(`http://localhost:${SERVER_PORT}`, visitPath);
 
           const navigate = Page.enable()
-            .then(() => Page.navigate({ url }))
             .then(() => Page.addScriptToEvaluateOnNewDocument({source: `
               window.addEventListener('application', ({ detail: Application }) => {
                 Application.autoboot = false;
               });
             `}))
+            .then(() => Page.navigate({ url }))
             .then(() => Page.loadEventFired());
 
           return navigate
