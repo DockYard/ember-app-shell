@@ -8,8 +8,6 @@ const http = require('http');
 const critical = require('critical');
 const chromeLauncher = require('chrome-launcher');
 const chromeInterface = require('chrome-remote-interface');
-const EmberApp = require('ember-cli/lib/broccoli/ember-app');
-const environment = EmberApp.env();
 const stringUtil = require('ember-cli-string-utils');
 
 const DEFAULT_OPTIONS = {
