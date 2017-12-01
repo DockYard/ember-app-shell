@@ -37,7 +37,7 @@ module.exports = {
   },
 
   postBuild({ directory }) {
-    if (environment === 'test') {
+    if (this.app.env === 'test') {
       return;
     }
 
@@ -123,7 +123,7 @@ module.exports = {
   },
 
   contentFor(type) {
-    if (type === 'body-footer' && environment !== 'test') {
+    if (type === 'body-footer' && this.app.env !== 'test') {
       return PLACEHOLDER;
     }
   },
@@ -158,7 +158,7 @@ module.exports = {
   },
 
   _appGlobal() {
-    let config = require(path.join(this.app.project.root, 'config/environment'))(environment);
+    let config = require(path.join(this.app.project.root, 'config/environment'))(this.app.env);
 
     var value = config.exportApplicationGlobal;
 
