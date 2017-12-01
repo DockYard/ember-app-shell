@@ -9,7 +9,7 @@ const critical = require('critical');
 const chromeLauncher = require('chrome-launcher');
 const chromeInterface = require('chrome-remote-interface');
 const EmberApp = require('ember-cli/lib/broccoli/ember-app');
-const envTarget = EmberApp.env();
+const environment = EmberApp.env();
 const stringUtil = require('ember-cli-string-utils');
 
 const DEFAULT_OPTIONS = {
@@ -37,6 +37,10 @@ module.exports = {
   },
 
   postBuild({ directory }) {
+    if (environment === 'test') {
+      return;
+    }
+
     let { outputFile, visitPath } = this.app.options['ember-app-shell'];
 
     return this._launchAppServer(directory)
@@ -119,7 +123,7 @@ module.exports = {
   },
 
   contentFor(type) {
-    if (type === 'body-footer') {
+    if (type === 'body-footer' && environment !== 'test') {
       return PLACEHOLDER;
     }
   },
@@ -154,7 +158,7 @@ module.exports = {
   },
 
   _appGlobal() {
-    let config = require(path.join(this.app.project.root, 'config/environment'))(envTarget);
+    let config = require(path.join(this.app.project.root, 'config/environment'))(environment);
 
     var value = config.exportApplicationGlobal;
 
