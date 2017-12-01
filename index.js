@@ -9,7 +9,7 @@ const critical = require('critical');
 const chromeLauncher = require('chrome-launcher');
 const chromeInterface = require('chrome-remote-interface');
 const EmberApp = require('ember-cli/lib/broccoli/ember-app');
-const envTarget = process.env.DEPLOY_TARGET || EmberApp.env();
+const envTarget = EmberApp.env();
 const stringUtil = require('ember-cli-string-utils');
 
 const DEFAULT_OPTIONS = {
