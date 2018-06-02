@@ -20,14 +20,8 @@ ember install ember-app-shell
 
 ### Make sure Google Chrome is installed on the build environment
 
-You also need to make sure that every environment that will build your app runs Google Chrome (Canary).
-See the [README](https://www.npmjs.com/package/chrome-launcher#continuous-integration) of the `chrome-launcher` NPM package for more details on how to install Chrome on CI environments.
-
-### Export application global
-
-To properly ensure app rendering of the app shell this addon makes use of Ember's visit API. To do this in all environments you must
-configure your app to export its application global for all environments. By default, Ember does not do this in `production`.
-[Read more about exporting your application's global](https://github.com/ember-cli/ember-export-application-global).
+Installing puppeteer automatically installs a compatible version of
+Chromium. If you _don't_ want to do this, you can set `PUPPETEER_SKIP_CHROMIUM_DOWNLOAD`. For more information see Puppeteers [Environment Variables](https://github.com/GoogleChrome/puppeteer/blob/master/docs/api.md#environment-variables) documentation.
 
 ## Getting Started
 
@@ -120,7 +114,7 @@ Default: `index.html`
 
 ### `chromeFlags`
 
-Flags passed to chrome by [`chrome-launcher`](https://github.com/GoogleChrome/chrome-launcher).
+Flags passed to chrome by [`puppeteer.launch()`](https://github.com/GoogleChrome/puppeteer/blob/master/docs/api.md#puppeteerlaunchoptions).
 
 Default: `[]`
 
@@ -129,6 +123,18 @@ Default: `[]`
 The options passed to the [`critical`](https://github.com/addyosmani/critical) module.
 
 Default: `{ minify: true }`
+
+### `skipCritical`
+
+If you want to skip inlining critical CSS, set this to `true`.
+
+
+### `root`
+
+If you've specified a `rootURL` in your app config, pass it ot
+ember-app-shell as `root`. This will ensure the express server loads
+properly when rendering your app-shell route.
+
 
 ## Troubleshooting
 

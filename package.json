@@ -9,8 +9,7 @@
   "author": "",
   "repository": "https://github.com/DockYard/ember-app-shell",
   "dependencies": {
-    "chrome-launcher": "^0.8.0",
-    "chrome-remote-interface": "^0.25.0",
+    "puppeteer": "^1.4.0",
     "critical": "^1.0.0",
     "ember-cli-babel": "^6.3.0",
     "express": "^4.15.5"
