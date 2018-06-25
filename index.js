@@ -13,6 +13,7 @@ const stringUtil = require('ember-cli-string-utils');
 const DEFAULT_OPTIONS = {
   visitPath: '/app-shell',
   outputFile: 'index.html',
+  enabled: true,
   chromeFlags: []
 };
 
@@ -32,10 +33,13 @@ module.exports = {
     this.app = app;
     this.app.options = this.app.options || {};
     this.app.options['ember-app-shell'] = Object.assign({}, DEFAULT_OPTIONS, this.app.options['ember-app-shell']);
+    if (process.env.APP_SHELL_DISABLED) {
+      this.app.options['ember-app-shell'].enabled = false;
+    }
   },
 
   postBuild({ directory }) {
-    if (this.app.env === 'test') {
+    if (!this.app.options['ember-app-shell'].enabled || this.app.env === 'test') {
       return;
     }
 
@@ -121,7 +125,7 @@ module.exports = {
   },
 
   contentFor(type) {
-    if (type === 'body-footer' && this.app.env !== 'test') {
+    if (type === "body-footer" && this.app.env !== "test" && this.app.options["ember-app-shell"].enabled) {
       return PLACEHOLDER;
     }
   },

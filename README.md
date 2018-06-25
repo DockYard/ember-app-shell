@@ -97,7 +97,8 @@ module.exports = function(defaults) {
       criticalCSSOptions: {
         width: 1300,
         height: 900
-      }
+      },
+      // enabled: false  (if you want to disable it. You can also pass `APP_SHELL_DISABLED=true` when running `ember serve`)
     }
   });
 
